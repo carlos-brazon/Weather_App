@@ -5,9 +5,10 @@ export const getClimaHora = async (url) => {
     return data;
 }
 
-export const paintInfoWeather = async (objeto) =>{
-    const div = document.querySelector('.contenedorPrincipal')
-    div.innerHTML=`<div class="contenedorClimaHora"> 
+export const paintInfoWeather = async (objeto, diario) =>{
+    const div = document.querySelector('.nuevo')
+    const div2 = document.querySelector('.climaDiario')
+    div.innerHTML=`
             <div class="climaHora">
                 <div class="infoClima">
                     <h1>${objeto.name}</h1>
@@ -22,40 +23,37 @@ export const paintInfoWeather = async (objeto) =>{
                     <p> velocidad del viento: ${(objeto.wind.speed*3.6).toFixed(2)} Km/h </p>
                 </div>
             </div>
-
-        </div>
-
-        <div class="climaDiario">
+            `
+        div2.innerHTML= `
             <div class="diario">
-                <p>fecha</p>
+                <p>${diario.list[0].dt_txt.slice(0,-9)}</p>
                 <div class="info">
-                    <span>15c - 20c</span>
+                    <span>${Math.round(diario.list[0].main.temp_min-273.15)}ºC - ${Math.round(diario.list[0].main.temp_max-273.15)}ºC</span>
                     <div class="imagen">
-                        <img src="./assets/soleado.png" alt="">
-                        <p>${objeto.weather[0].description}</p>
+                        <img src="./assets/${diario.list[0].weather[0].id}.png" alt="">
+                        <p>${diario.list[0].weather[0].description}</p>
                     </div>
                 </div>
             </div>
             <div class="diario">
-                <p>fecha</p>
+                <p>${diario.list[8].dt_txt.slice(0,-9)}</p>
                 <div class="info">
-                    <span>15c - 20c</span>
+                    <span>${Math.round(diario.list[8].main.temp_min-273.15)}ºC - ${Math.round(diario.list[8].main.temp_max-273.15)}ºC</span>
                     <div class="imagen">
-                        <img src="./assets/soleado.png" alt="">
-                        <p>${objeto.weather[0].description}</p>
+                        <img src="./assets/${diario.list[8].weather[0].id}.png" alt="">
+                        <p>${diario.list[8].weather[0].description}</p>
                     </div>
                 </div>
             </div>
             <div class="diario">
-                <p>fecha</p>
+                <p>${diario.list[16].dt_txt.slice(0,-9)}</p>
                 <div class="info">
-                    <span>15c - 20c</span>
+                    <span>${Math.round(diario.list[16].main.temp_min-273.15)}ºC - ${Math.round(diario.list[16].main.temp_max-273.15)}ºC</span>
                     <div class="imagen">
-                        <img src="./assets/soleado.png" alt="">
-                        <p>${objeto.weather[0].description}</p>
+                        <img src="./assets/${diario.list[16].weather[0].id}.png" alt="">
+                        <p>${diario.list[16].weather[0].description}</p>
                     </div>
                 </div>
             </div>
-        </div>
     `
 }
