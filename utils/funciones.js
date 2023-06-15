@@ -5,56 +5,116 @@ export const getClimaHora = async (url) => {
     return data;
 }
 
-export const paintInfoWeather = async (objeto, diario) =>{
+export const paintInfoWeather = async (objeto, diario) => {
+    console.log((objeto.weather[0].icon).charAt(2));
+    if ((objeto.weather[0].icon).charAt(2)==='n') {
+        const body = document.querySelector('body');
+        console.log(body);
+        body.style.backgroundImage= "url('./assets/noche.jpg')"
+    }
+    const body = document.querySelector('body');
+    body.style.backgroundImage="url('../assets/cielo.png')"
     const div = document.querySelector('.nuevo')
     const div2 = document.querySelector('.climaDiario')
-    const hora = (new Date(objeto.dt*1000)).toLocaleString();
-    div.innerHTML=`
+    const hora = (new Date(objeto.dt * 1000)).toLocaleString();
+    div.innerHTML = `
             <div class="climaHora">
                 <div class="infoClima">
                     <h1>${objeto.name}</h1>
                     <p>${hora}</p>
-                    <h2>${Math.round(objeto.main.temp-273.15)} ºC</h2>
+                    <h2>${Math.round(objeto.main.temp - 273.15)} ºC</h2>
                 </div>
                 <div class="lluvia">
                     <div class="logo">
                         <img src="https://openweathermap.org/img/wn/${objeto.weather[0].icon}@2x.png" alt="">
                         <p>${objeto.weather[0].description}</p>
                     </div>
-                    <p> velocidad del viento: ${(objeto.wind.speed*3.6).toFixed(2)} Km/h </p>
+                    <p> velocidad del viento: ${(objeto.wind.speed * 3.6).toFixed(2)} Km/h </p>
                 </div>
             </div>
             `
-        div2.innerHTML= `
+    div2.innerHTML = `
             <div class="diario">
-                <p>${diario.list[0].dt_txt}</p>
+                <p>${((maxTemp(diario.list)[3])[0]).slice(0, -9)}</p>
                 <div class="info">
-                    <span>${Math.round(diario.list[4].main.temp_min-273.15)}ºC - ${Math.round(diario.list[0].main.temp_max-273.15)}ºC</span>
+                    <span>${Math.round(((maxTemp(diario.list)[0])[0].min) - 273.15)}ºC - ${Math.round(((maxTemp(diario.list)[0])[0].max) - 273.15)}ºC</span>
                     <div class="imagen">
-                        <img src="https://openweathermap.org/img/wn/${diario.list[0].weather[0].icon}@2x.png" alt="aquí va una imagen de una nube">
-                        <p>${diario.list[0].weather[0].description}</p>
+                        <img src="https://openweathermap.org/img/wn/${((maxTemp(diario.list)[2])[0])}@2x.png" alt="aquí va una imagen de una nube">
+                        <p>${((maxTemp(diario.list)[1])[0])}</p>
                         </div>
                         </div>
                         </div>
                         <div class="diario">
-                        <p>${diario.list[8].dt_txt}</p>
+                        <p>${((maxTemp(diario.list)[3])[1]).slice(0, -9)}</p>
                         <div class="info">
-                        <span>${Math.round(diario.list[12].main.temp_min-273.15)}ºC - ${Math.round(diario.list[8].main.temp_max-273.15)}ºC</span>
+                        <span>${Math.round(((maxTemp(diario.list)[0])[1].min) - 273.15)}ºC - ${Math.round(((maxTemp(diario.list)[0])[1].max) - 273.15)}ºC</span>
                         <div class="imagen">
-                        <img src="https://openweathermap.org/img/wn/${diario.list[8].weather[0].icon}@2x.png" alt="aquí va una imagen de una nube">
-                        <p>${diario.list[8].weather[0].description}</p>
+                        <img src="https://openweathermap.org/img/wn/${((maxTemp(diario.list)[2])[1])}@2x.png" alt="aquí va una imagen de una nube">
+                        <p>${((maxTemp(diario.list)[1])[1])}</p>
                         </div>
                         </div>
                         </div>
                         <div class="diario">
-                        <p>${diario.list[16].dt_txt.slice(0,-9)}</p>
+                        <p>${((maxTemp(diario.list)[3])[1]).slice(0, -9)}</p>
                         <div class="info">
-                        <span>${Math.round(diario.list[20].main.temp_min-273.15)}ºC - ${Math.round(diario.list[16].main.temp_max-273.15)}ºC</span>
+                        <span>${Math.round(((maxTemp(diario.list)[0])[2].min) - 273.15)}ºC - ${Math.round(((maxTemp(diario.list)[0])[2].max) - 273.15)}ºC</span>
                         <div class="imagen">
-                        <img src="https://openweathermap.org/img/wn/${diario.list[16].weather[0].icon}@2x.png" alt="aquí va una imagen de una nube">
-                        <p>${diario.list[16].weather[0].description}</p>
+                        <img src="https://openweathermap.org/img/wn/${((maxTemp(diario.list)[2])[2])}@2x.png" alt="aquí va una imagen de una nube">
+                        <p>${((maxTemp(diario.list)[1])[2])}</p>
                     </div>
                 </div>
             </div>
-    `
+            `
+}
+
+export const maxTemp = (array) => {
+    const date = new Date();
+    const day = date.getDate();
+    const sinDiadeHoy = array.filter(element => day !== Number(element.dt_txt.slice(8, 10)));
+    let clima = [sinDiadeHoy[5].weather[0].description, sinDiadeHoy[13].weather[0].description, sinDiadeHoy[21].weather[0].description]
+    let icon = [sinDiadeHoy[5].weather[0].icon, sinDiadeHoy[13].weather[0].icon, sinDiadeHoy[21].weather[0].icon]
+    let dateToPaint = [sinDiadeHoy[5].dt_txt, sinDiadeHoy[13].dt_txt, sinDiadeHoy[21].dt_txt]
+    const temp = [
+        {
+            max: [],
+            min: []
+        },
+        {
+            max: [],
+            min: []
+        },
+        {
+            max: [],
+            min: []
+        }
+    ];
+
+    for (let i = 0; i < sinDiadeHoy.length; i++) {
+        const element = sinDiadeHoy[i];
+        if (i >= 0 && i <= 7) {
+            temp[0].max.push(element.main.temp_max);
+            temp[0].min.push(element.main.temp_max);
+        }
+        if (i >= 8 && i <= 15) {
+            temp[1].max.push(element.main.temp_max);
+            temp[1].min.push(element.main.temp_max);
+        }
+        if (i >= 16 && i <= 23) {
+            temp[2].max.push(element.main.temp_max);
+            temp[2].min.push(element.main.temp_max);
+        }
+    }
+
+    const temperaturaMaxMin3dias = temp.map(element => {
+        return {
+            max: Math.max(...element.max),
+            min: Math.min(...element.min)
+        }
+    });
+    return [
+        temperaturaMaxMin3dias,
+        clima,
+        icon,
+        dateToPaint
+    ]
 }

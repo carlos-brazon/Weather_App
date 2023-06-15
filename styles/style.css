@@ -19,12 +19,16 @@ span{
 p{
     font-weight: 600;
 }
+h4{
+    font-size: 70px;
+    color: black;
+}
 
 body{
     display: flex;
     align-items: center;
     justify-content: center;
-    background-image: url('../assets/cielo.png');
+    /* background-image: url('../assets/cielo.png'); */
     background-position: center bottom;
     height: 792px;
     background-repeat: no-repeat;
@@ -85,8 +89,8 @@ input{
     width: 300px;
 }
 .lluvia img{
-width: 100px;
-height: 100px;
+width: 130px;
+height: 130px;
 }
 .lluvia>p{
     padding: 5px;
@@ -126,7 +130,7 @@ gap: 16px;
     align-items: center;
 }
 .imagen>img{
-    width: 50px;
-    height: 50px;
+    width: 60px;
+    height: 60px;
 }
 
