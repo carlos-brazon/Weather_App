@@ -5,23 +5,26 @@ export const getClimaHora = async (url) => {
     return data;
 }
 
-export const paintInfoWeather = async (objeto, diario) => {
-    console.log((objeto.weather[0].icon).charAt(2));
-    if ((objeto.weather[0].icon).charAt(2)==='n') {
+export const diaNoche = (objeto) => {
+    if ((objeto.weather[0].icon).charAt(2) === 'n') {
         const body = document.querySelector('body');
-        console.log(body);
-        body.style.backgroundImage= "url('./assets/noche.jpg')"
+        body.style.backgroundImage = "url('./assets/noche8.jpg')"
+    } else {
+        const body = document.querySelector('body');
+        body.style.backgroundImage = "url('./assets/cielo5.jpg')"
     }
-    const body = document.querySelector('body');
-    body.style.backgroundImage="url('../assets/cielo.png')"
+}
+
+export const paintInfoWeather = async (objeto, diario) => {
     const div = document.querySelector('.nuevo')
     const div2 = document.querySelector('.climaDiario')
-    const hora = (new Date(objeto.dt * 1000)).toLocaleString();
+    const dateAll = (new Date(objeto.dt * 1000)).toLocaleString();
+    const date= dateAll.slice(0, 9)
     div.innerHTML = `
             <div class="climaHora">
                 <div class="infoClima">
                     <h1>${objeto.name}</h1>
-                    <p>${hora}</p>
+                    <p>${date}</p>
                     <h2>${Math.round(objeto.main.temp - 273.15)} ºC</h2>
                 </div>
                 <div class="lluvia">
@@ -41,24 +44,24 @@ export const paintInfoWeather = async (objeto, diario) => {
                     <div class="imagen">
                         <img src="https://openweathermap.org/img/wn/${((maxTemp(diario.list)[2])[0])}@2x.png" alt="aquí va una imagen de una nube">
                         <p>${((maxTemp(diario.list)[1])[0])}</p>
-                        </div>
-                        </div>
-                        </div>
-                        <div class="diario">
-                        <p>${((maxTemp(diario.list)[3])[1]).slice(0, -9)}</p>
-                        <div class="info">
-                        <span>${Math.round(((maxTemp(diario.list)[0])[1].min) - 273.15)}ºC - ${Math.round(((maxTemp(diario.list)[0])[1].max) - 273.15)}ºC</span>
-                        <div class="imagen">
+                    </div>
+                </div>
+            </div>
+            <div class="diario">
+                <p>${((maxTemp(diario.list)[3])[1]).slice(0, -9)}</p>
+                <div class="info">
+                    <span>${Math.round(((maxTemp(diario.list)[0])[1].min) - 273.15)}ºC - ${Math.round(((maxTemp(diario.list)[0])[1].max) - 273.15)}ºC</span>
+                    <div class="imagen">
                         <img src="https://openweathermap.org/img/wn/${((maxTemp(diario.list)[2])[1])}@2x.png" alt="aquí va una imagen de una nube">
                         <p>${((maxTemp(diario.list)[1])[1])}</p>
-                        </div>
-                        </div>
-                        </div>
-                        <div class="diario">
-                        <p>${((maxTemp(diario.list)[3])[1]).slice(0, -9)}</p>
-                        <div class="info">
-                        <span>${Math.round(((maxTemp(diario.list)[0])[2].min) - 273.15)}ºC - ${Math.round(((maxTemp(diario.list)[0])[2].max) - 273.15)}ºC</span>
-                        <div class="imagen">
+                    </div>
+                </div>
+            </div>
+            <div class="diario">
+                <p>${((maxTemp(diario.list)[3])[1]).slice(0, -9)}</p>
+                <div class="info">
+                    <span>${Math.round(((maxTemp(diario.list)[0])[2].min) - 273.15)}ºC - ${Math.round(((maxTemp(diario.list)[0])[2].max) - 273.15)}ºC</span>
+                    <div class="imagen">
                         <img src="https://openweathermap.org/img/wn/${((maxTemp(diario.list)[2])[2])}@2x.png" alt="aquí va una imagen de una nube">
                         <p>${((maxTemp(diario.list)[1])[2])}</p>
                     </div>
@@ -70,7 +73,9 @@ export const paintInfoWeather = async (objeto, diario) => {
 export const maxTemp = (array) => {
     const date = new Date();
     const day = date.getDate();
+
     const sinDiadeHoy = array.filter(element => day !== Number(element.dt_txt.slice(8, 10)));
+    
     let clima = [sinDiadeHoy[5].weather[0].description, sinDiadeHoy[13].weather[0].description, sinDiadeHoy[21].weather[0].description]
     let icon = [sinDiadeHoy[5].weather[0].icon, sinDiadeHoy[13].weather[0].icon, sinDiadeHoy[21].weather[0].icon]
     let dateToPaint = [sinDiadeHoy[5].dt_txt, sinDiadeHoy[13].dt_txt, sinDiadeHoy[21].dt_txt]

@@ -28,7 +28,7 @@ body{
     display: flex;
     align-items: center;
     justify-content: center;
-    /* background-image: url('../assets/cielo.png'); */
+    background-image: url('../assets/cielo.png');
     background-position: center bottom;
     height: 792px;
     background-repeat: no-repeat;
